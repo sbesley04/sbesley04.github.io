@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>[YOUR NAME] — Data & Global Affairs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── TOKENS ─────────────────────────────────────── */
+    :root {
+      --ink:      #0f1117;
+      --paper:    #f5f2eb;
+      --accent:   #2a5c8a;
+      --accent2:  #c95f2a;
+      --muted:    #6b6b72;
+      --border:   #d8d4cb;
+      --card:     #fffdf8;
+      --serif:    'DM Serif Display', Georgia, serif;
+      --sans:     'DM Sans', sans-serif;
+      --mono:     'DM Mono', monospace;
+    }
+
+    /* ── RESET ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    /* ── NAV ────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.1rem 4rem;
+      background: rgba(245,242,235,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      letter-spacing: 0.01em;
+    }
+    .nav-links { display: flex; gap: 2.2rem; }
+    .nav-links a {
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ───────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 5rem;
+      overflow: hidden;
+    }
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6rem 4rem 6rem 4rem;
+    }
+    .hero-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      color: var(--accent2);
+      border: 1px solid var(--accent2);
+      padding: 0.25rem 0.7rem;
+      border-radius: 2px;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.1s forwards;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 5vw, 4.4rem);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.4rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.25s forwards;
+    }
+    h1 em { font-style: italic; color: var(--accent); }
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 42ch;
+      margin-bottom: 2.4rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.4s forwards;
+    }
+    .hero-ctas {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.55s forwards;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.7rem 1.6rem;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: #1d4466; transform: translateY(-1px); }
+    .btn-outline {
+      border: 1.5px solid var(--ink);
+      color: var(--ink);
+    }
+    .btn-outline:hover { background: var(--ink); color: var(--paper); transform: translateY(-1px); }
+
+    .hero-right {
+      position: relative;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .hero-pattern {
+      position: absolute; inset: 0;
+      opacity: 0.12;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.5) 39px, rgba(255,255,255,0.5) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.5) 39px, rgba(255,255,255,0.5) 40px);
+    }
+    .hero-globe {
+      position: relative; z-index: 1;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      animation: spin 60s linear infinite;
+    }
+    .hero-globe::before {
+      content: '';
+      position: absolute; inset: 20px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .hero-globe::after {
+      content: '';
+      position: absolute; inset: 60px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .globe-icon { font-size: 7rem; filter: grayscale(1) brightness(3); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTION SHELL ──────────────────────────────── */
+    section { padding: 6rem 4rem; }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      color: var(--accent2);
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      line-height: 1.15;
+      margin-bottom: 2.4rem;
+    }
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 0;
+    }
+
+    /* ── ABOUT ──────────────────────────────────────── */
+    #about { background: var(--card); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .about-body p { color: #2e2e36; margin-bottom: 1.2rem; }
+    .about-body p:last-child { margin-bottom: 0; }
+    .about-sidebar {}
+    .sidebar-block { margin-bottom: 2rem; }
+    .sidebar-block h4 {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.4rem;
+    }
+    .sidebar-block p, .sidebar-block li {
+      font-size: 0.92rem;
+      color: #2e2e36;
+      line-height: 1.6;
+    }
+    .sidebar-block ul { list-style: none; }
+    .sidebar-block ul li::before { content: "→ "; color: var(--accent); }
+
+    /* ── SKILLS ─────────────────────────────────────── */
+    #skills { background: var(--paper); }
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.6rem;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .skill-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .skill-card-icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+    .skill-card h3 {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      margin-bottom: 0.7rem;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.8rem; }
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 3px;
+      background: rgba(42,92,138,0.1);
+      color: var(--accent);
+      border: 1px solid rgba(42,92,138,0.2);
+    }
+
+    /* ── PROJECTS ───────────────────────────────────── */
+    #projects { background: var(--ink); color: var(--paper); }
+    #projects .section-title { color: var(--paper); }
+    #projects .section-label { color: var(--accent2); }
+    .projects-stack { display: flex; flex-direction: column; gap: 1.5rem; }
+    .project-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      padding: 2rem 2.2rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: start;
+      transition: background 0.2s;
+    }
+    .project-card:hover { background: rgba(255,255,255,0.07); }
+    .project-num {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent2);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+    .project-card h3 {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      color: var(--paper);
+      margin-bottom: 0.5rem;
+    }
+    .project-card p { font-size: 0.93rem; color: rgba(245,242,235,0.65); max-width: 70ch; }
+    .project-meta { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .project-tag {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.07);
+      color: rgba(245,242,235,0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .project-links { display: flex; flex-direction: column; gap: 0.6rem; align-items: flex-end; }
+    .project-link {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--accent2);
+      border: 1px solid var(--accent2);
+      padding: 0.3rem 0.8rem;
+      border-radius: 3px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .project-link:hover { background: var(--accent2); color: #fff; }
+
+    /* ── WRITING ─────────────────────────────────────── */
+    #writing { background: var(--paper); }
+    .writing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    .writing-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.8rem;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .writing-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.07); transform: translateY(-2px); }
+    .writing-type {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--accent2);
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .writing-card h3 {
+      font-family: var(--serif);
+      font-size: 1.18rem;
+      line-height: 1.3;
+      margin-bottom: 0.6rem;
+    }
+    .writing-card p { font-size: 0.9rem; color: var(--muted); }
+    .writing-card a.read-link {
+      display: inline-block;
+      margin-top: 1rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--accent);
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 1px;
+    }
+
+    /* ── CONTACT ─────────────────────────────────────── */
+    #contact {
+      background: var(--accent);
+      color: #fff;
+      text-align: center;
+      padding: 6rem 4rem;
+    }
+    #contact .section-label { color: rgba(255,255,255,0.6); }
+    #contact .section-title { color: #fff; max-width: 18ch; margin-left: auto; margin-right: auto; }
+    .contact-sub {
+      color: rgba(255,255,255,0.75);
+      font-size: 1rem;
+      max-width: 50ch;
+      margin: 0 auto 2.5rem;
+    }
+    .contact-links { display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap; }
+    .contact-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      padding: 0.7rem 1.4rem;
+      border: 1.5px solid rgba(255,255,255,0.5);
+      border-radius: 4px;
+      color: #fff;
+      transition: all 0.2s;
+    }
+    .contact-link:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
+
+    /* ── FOOTER ─────────────────────────────────────── */
+    footer {
+      background: var(--ink);
+      color: rgba(245,242,235,0.4);
+      text-align: center;
+      padding: 1.8rem 4rem;
+      font-size: 0.82rem;
+      font-family: var(--mono);
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.4rem; }
+      #hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 7rem 1.5rem 4rem; }
+      section { padding: 4rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      .writing-grid { grid-template-columns: 1fr; }
+      .project-card { grid-template-columns: 1fr; }
+      .project-links { flex-direction: row; align-items: flex-start; }
+    }
+    @media (max-width: 560px) {
+      .nav-links { display: none; }
+      .skills-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════════ -->
+<nav>
+  <span class="nav-logo">[YOUR NAME]</span>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#writing">Writing</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-left">
+    <span class="hero-tag">Data Science × International Studies</span>
+    <h1>Turning global <em>complexity</em> into clear data stories.</h1>
+    <p class="hero-sub">
+      <!-- FILL IN: 1–2 sentences. Who you are, what you do, what drives you.
+           Example: "I'm a data analyst and international studies student at [University],
+           focused on using data to understand global systems — from migration patterns
+           to economic development." -->
+      [Your 1–2 sentence headline pitch. See comment above for guidance.]
+    </p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn btn-primary">See My Work</a>
+      <a href="#contact" class="btn btn-outline">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-right" aria-hidden="true">
+    <div class="hero-pattern"></div>
+    <div class="hero-globe">
+      <span class="globe-icon">🌐</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ ABOUT ══════════════════════════════════════════ -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-body">
+      <p class="section-label">About</p>
+      <h2 class="section-title">The person behind the data.</h2>
+
+      <!-- PARAGRAPH 1: Your story. Where you're from, what you study, what connects your two fields. -->
+      <p>
+        [I'm a [year, e.g. junior] at [University Name] studying [your majors/minors].
+        My path into data science started from [brief origin story — a class, a problem
+        you wanted to solve, a moment of curiosity]. What keeps me here is [what excites you
+        about the intersection of data + global affairs].]
+      </p>
+
+      <!-- PARAGRAPH 2: What you actually do / are building toward. -->
+      <p>
+        [Right now, I'm focused on [current project, research, or goal]. I'm especially
+        interested in [specific topic area — e.g. climate displacement, trade policy,
+        conflict data, global health] and how data can make these issues more legible
+        to decision-makers and the public.]
+      </p>
+
+      <!-- PARAGRAPH 3 (optional): A human note. Hobbies, languages, what makes you you. -->
+      <p>
+        [Outside of work, I [hobby / interest]. I speak [languages if relevant].
+        I'm currently [looking for / open to] [internships / full-time roles / research
+        opportunities] in [location or remote].]
+      </p>
+    </div>
+
+    <div class="about-sidebar">
+      <div class="sidebar-block">
+        <h4>Education</h4>
+        <ul>
+          <li>[Degree], [Major] — [University], [Expected Grad Year]</li>
+          <!-- Add a second major/minor if applicable -->
+          <!-- <li>[Minor / Second Major]</li> -->
+        </ul>
+      </div>
+      <div class="sidebar-block">
+        <h4>Currently</h4>
+        <p>
+          [e.g. Research assistant at [Lab/Dept] · Looking for summer 2026 internships]
+        </p>
+      </div>
+      <div class="sidebar-block">
+        <h4>Interests</h4>
+        <ul>
+          <li>[Interest 1 — keep it specific, e.g. "Conflict data visualization"]</li>
+          <li>[Interest 2 — e.g. "Development economics in Sub-Saharan Africa"]</li>
+          <li>[Interest 3 — e.g. "Natural language processing for policy analysis"]</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ SKILLS ══════════════════════════════════════════ -->
+<section id="skills">
+  <p class="section-label">Skills</p>
+  <h2 class="section-title">What I work with.</h2>
+
+  <div class="skills-grid">
+
+    <!-- CARD 1: Data & Programming -->
+    <div class="skill-card">
+      <div class="skill-card-icon">📊</div>
+      <h3>Data Analysis</h3>
+      <p style="font-size:0.9rem; color:var(--muted);">
+        <!-- Describe how you use these tools, not just what they are -->
+        [e.g. Cleaning messy real-world datasets, building reproducible analysis pipelines,
+        and communicating findings clearly.]
+      </p>
+      <div class="skill-tags">
+        <!-- Add / remove tags to match your actual tools -->
+        <span class="tag">Python</span>
+        <span class="tag">Pandas</span>
+        <span class="tag">R</span>
+        <span class="tag">SQL</span>
+        <span class="tag">Jupyter</span>
+      </div>
+    </div>
+
+    <!-- CARD 2: Visualization -->
+    <div class="skill-card">
+      <div class="skill-card-icon">🗺️</div>
+      <h3>Visualization & Mapping</h3>
+      <p style="font-size:0.9rem; color:var(--muted);">
+        [e.g. Turning datasets into interactive charts and maps that make patterns
+        visible at a glance — especially geospatial and time-series data.]
+      </p>
+      <div class="skill-tags">
+        <span class="tag">Tableau</span>
+        <span class="tag">Matplotlib</span>
+        <span class="tag">Plotly</span>
+        <span class="tag">QGIS</span>
+        <!-- Add others: d3.js, Seaborn, Power BI, etc. -->
+      </div>
+    </div>
+
+    <!-- CARD 3: Research & Writing -->
+    <div class="skill-card">
+      <div class="skill-card-icon">🌍</div>
+      <h3>Research & Policy</h3>
+      <p style="font-size:0.9rem; color:var(--muted);">
+        [e.g. Synthesizing academic and primary sources into clear policy briefs and
+        research memos. Comfortable with both quantitative and qualitative methods.]
+      </p>
+      <div class="skill-tags">
+        <span class="tag">Policy Analysis</span>
+        <span class="tag">Literature Review</span>
+        <span class="tag">[Language, e.g. Spanish]</span>
+        <!-- Add area expertise: e.g. MENA, Sub-Saharan Africa, etc. -->
+      </div>
+    </div>
+
+    <!-- CARD 4: Tools & Workflow — optional, edit or delete -->
+    <div class="skill-card">
+      <div class="skill-card-icon">⚙️</div>
+      <h3>Tools & Workflow</h3>
+      <p style="font-size:0.9rem; color:var(--muted);">
+        [e.g. Comfortable working end-to-end: from raw data collection to version-controlled,
+        reproducible workflows and presentation-ready outputs.]
+      </p>
+      <div class="skill-tags">
+        <span class="tag">Git / GitHub</span>
+        <span class="tag">Excel</span>
+        <span class="tag">Google Sheets</span>
+        <span class="tag">[Add more]</span>
+      </div>
+    </div>
+
+    <!-- Add or remove cards as needed -->
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ PROJECTS ═════════════════════════════════════ -->
+<section id="projects">
+  <p class="section-label">Projects</p>
+  <h2 class="section-title">Selected work.</h2>
+
+  <div class="projects-stack">
+
+    <!-- PROJECT 1 — Your strongest piece -->
+    <div class="project-card">
+      <div>
+        <p class="project-num">01</p>
+        <h3>[Project Title — make it descriptive, not just "Final Project"]</h3>
+        <p>
+          <!-- 2–3 sentences: What question did you ask? What data did you use?
+               What did you find or build? What does it show? -->
+          [e.g. Analyzed 20 years of UNHCR displacement data to map how climate shocks
+          correlate with forced migration in the Sahel region. Built an interactive
+          choropleth dashboard allowing users to explore trends by year and country.
+          Finding: drought years predict a 34% spike in cross-border displacement
+          within 18 months.]
+        </p>
+        <div class="project-meta">
+          <span class="project-tag">[Tool used, e.g. Python]</span>
+          <span class="project-tag">[Tool, e.g. Plotly]</span>
+          <span class="project-tag">[Data source, e.g. UNHCR]</span>
+          <span class="project-tag">[Domain, e.g. Migration]</span>
+        </div>
+      </div>
+      <div class="project-links">
+        <a href="[YOUR GITHUB LINK]" class="project-link">GitHub →</a>
+        <!-- If you have a live demo or writeup, add it: -->
+        <!-- <a href="#" class="project-link">Live Demo →</a> -->
+      </div>
+    </div>
+
+    <!-- PROJECT 2 -->
+    <div class="project-card">
+      <div>
+        <p class="project-num">02</p>
+        <h3>[Second Project Title]</h3>
+        <p>
+          [Same format: question → data → method → finding or output.
+          Aim for something that complements project 1 — different method,
+          different region, or different data type.]
+        </p>
+        <div class="project-meta">
+          <span class="project-tag">[Tool]</span>
+          <span class="project-tag">[Tool]</span>
+          <span class="project-tag">[Domain]</span>
+        </div>
+      </div>
+      <div class="project-links">
+        <a href="[YOUR GITHUB LINK]" class="project-link">GitHub →</a>
+      </div>
+    </div>
+
+    <!-- PROJECT 3 — optional but recommended -->
+    <div class="project-card">
+      <div>
+        <p class="project-num">03</p>
+        <h3>[Third Project Title]</h3>
+        <p>
+          [This one can be a course project, a research assistant contribution,
+          or a personal data exploration. Don't omit it just because it wasn't
+          for a class or job — if you learned something interesting, show it.]
+        </p>
+        <div class="project-meta">
+          <span class="project-tag">[Tool]</span>
+          <span class="project-tag">[Domain]</span>
+        </div>
+      </div>
+      <div class="project-links">
+        <a href="[YOUR GITHUB LINK]" class="project-link">GitHub →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ WRITING ════════════════════════════════════════ -->
+<section id="writing">
+  <p class="section-label">Writing</p>
+  <h2 class="section-title">Analysis & ideas.</h2>
+
+  <div class="writing-grid">
+
+    <!-- WRITING PIECE 1: Policy brief or research paper -->
+    <div class="writing-card">
+      <p class="writing-type">Policy Brief</p>
+      <h3>[Title of your policy brief or research paper]</h3>
+      <p>
+        <!-- 1–2 sentences: what it argues, for what audience, what context -->
+        [e.g. A policy brief written for [class / organization] examining [topic].
+        Argued that [your main recommendation or finding] based on [evidence/data used].]
+      </p>
+      <a href="[LINK TO PDF OR GOOGLE DOC]" class="read-link">Read →</a>
+    </div>
+
+    <!-- WRITING PIECE 2: Research essay or op-ed -->
+    <div class="writing-card">
+      <p class="writing-type">Research Essay</p>
+      <h3>[Title of essay or paper]</h3>
+      <p>
+        [e.g. An analytical essay exploring [topic] through [theoretical lens].
+        Written for [course/publication] in [year].]
+      </p>
+      <a href="[LINK]" class="read-link">Read →</a>
+    </div>
+
+    <!-- WRITING PIECE 3 — optional: blog post, data explainer, etc. -->
+    <div class="writing-card">
+      <p class="writing-type">Data Explainer</p>
+      <h3>[Title — e.g. "What the numbers actually say about X"]</h3>
+      <p>
+        [A short data-driven explainer you wrote for a general audience.
+        This could be a blog post, a class assignment framed publicly, or
+        something you wrote independently.]
+      </p>
+      <a href="[LINK]" class="read-link">Read →</a>
+    </div>
+
+    <!-- Add a 4th card or remove one as needed -->
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ CONTACT ════════════════════════════════════════ -->
+<section id="contact">
+  <p class="section-label">Contact</p>
+  <h2 class="section-title">Let's work together.</h2>
+  <p class="contact-sub">
+    <!-- FILL IN: What you're open to. Be specific — it helps. -->
+    [I'm currently open to internships, research assistant roles, and
+    entry-level data analyst positions — especially in organizations working on
+    [your focus area, e.g. international development, climate policy, security].]
+  </p>
+  <div class="contact-links">
+    <a href="mailto:[YOUR EMAIL]" class="contact-link">✉ [your@email.com]</a>
+    <a href="https://linkedin.com/in/[YOURHANDLE]" class="contact-link" target="_blank">LinkedIn</a>
+    <a href="https://github.com/[YOURHANDLE]" class="contact-link" target="_blank">GitHub</a>
+    <!-- Optional extras: -->
+    <!-- <a href="[RESUME PDF LINK]" class="contact-link" target="_blank">Resume ↓</a> -->
+    <!-- <a href="https://twitter.com/[HANDLE]" class="contact-link" target="_blank">Twitter/X</a> -->
+  </div>
+</section>
+
+<!-- ══ FOOTER ══════════════════════════════════════════ -->
+<footer>
+  <!-- Update year as needed -->
+  &copy; 2025 [YOUR NAME] · Built with care · [yourname.com]
+</footer>
+
+</body>
+</html>
